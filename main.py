@@ -1,12 +1,10 @@
 import random
 
-# Variable to store question ID for later comparison of asked question vs its correct answer
-# latest_asked_question_id = None
-
-# Create questions list to store quiz questions - each question will be dictionary inside the list
+# Create "list" called "questions" to store quiz questions
+# Inside the "list", create several "dictionary" to store each question and its related multiple choices and answer
+# Inside the "dictionary", make value of "choices" to be "list" for later itaration on it to print its element vertically
 questions = [
     {
-        # "question_id": 1,
         "question": "In which country is mount Kilimanjaro located?",
         "choices": ["A. Uganda", "B. Kenya", "C. Tanzania", "D. Rwanda"],
         "answer": "C"
@@ -33,37 +31,77 @@ questions = [
     }
 ]
 
-# print(questions)
+# Random rearrangement of questions inside the list
 random.shuffle(questions)
 
 score = 0
-correct_answers_num = 0
-# Create loops to iterate on questions and choices
-for question in questions:
-    print(question["question"])
-    for choice in question["choices"]:
-        print(choice)
-    correct_answer = question["answer"]
-    user_answer = input("Enter your answer: ").strip()
-    print()
-    if user_answer.casefold() == correct_answer.casefold():
-        score += 20
-        correct_answers_num += 1
-        if correct_answers_num > 1:
-            question_answered_correctly = "questions"
-        else:
-            question_answered_correctly = "question"
+correct_answers_num = 0 # Will store number of correctly answered questions (to determine how many questions were answered correctly)
 
+print("WELCOME TO QUIZ-GAME")
+print("Game Info:")
+print(" > Game will display different questions for you to answer correctly.")
+print(" > You are required to choose the correct answer from question multiple choice answers.")
+print(" > Make sure you enter the appropriate alphabet as your answer (either A, B, C or D).")
+print()
+input('Press "Enter" to start the game: ')
+print()
+
+# Create loops to iterate on "questions" and "choices" and print their associated data
+for question in questions:
+    while True:
+        print("Question:")
+        print(question["question"])
+
+        for choice in question["choices"]:
+            print(choice)
+
+        # Store value of correct answer to be compared with user answer to determine if user answered correctly
+        correct_answer = question["answer"]
+        user_answer = input("Enter your answer: ").strip()
+        print()
+        legit_alphabet_choices = "A B C D" # Will be used to check if user answered question using unauthorized values
+        # Check if user input is inappropriate e.g. empty, space or used other input values outside A, B, C or D.
+        if not user_answer or user_answer.casefold() not in legit_alphabet_choices.casefold():
+            # print()
+            print("The question is repeted for you to answer appropriately.")
+            print("Make sure you enter the respective alphabet of your correct answer (either A, B, C or D).")
+
+            # Re-eterate within the while loop to print the question agin (when user answers question inappropriately)
+            continue
+
+        # If user answered correctly
+        if user_answer.casefold() == correct_answer.casefold():
+            score += 20
+            correct_answers_num += 1
+
+            print("Congratulations!, you have answered the previous question correctly.")
+            print("20 points have been added to your score.")
+            print()
+
+            if correct_answers_num > 1:
+                question_answered_correctly = "questions"
+            else:
+                question_answered_correctly = "question"
+        else:
+            print("Sorry, your answer on previous question is incorrect. \n")
+
+        # Exit the while loop (when user answers appropriately) - so as to iterate inside the "for" loop (above) to display the next question
+        break
+
+print("Final Results:")
 if correct_answers_num == len(questions):
-    print("Congratulations, you have done excellent. You managed to answer all questions correctly!.")
+    # For users who answered all questions correctly (number of correctly answered questions equal to number of all questions)
+    print("Congratulations, you have done excellent. You managed to answer all questions correctly!")
     print(f"Your score is {score} points!")
 elif correct_answers_num > 0 and correct_answers_num < len(questions):
-    print(f"You have answered {correct_answers_num} {question_answered_correctly} correctly out of {len(questions)} questions, your final score is {score}")
+    # For users who get atleast 1 question correctly and above but not all questions
+    print(f"You have answered {correct_answers_num} {question_answered_correctly} correctly out of {len(questions)} questions, your final score is {score}.")
     if score >= 60 and score <= 80:
-        print(f"Your score is {score}. Keep it up the good work")
+        print(f"Your score is {score}. Keep it up the good work.")
     else:
         print(f"Your score is {score}. Your score is not good, but still there is room for improvement.")
 else:
+    # For users who fail to answer any question
     print("Sorry, you failed to answer any question correctly.")
-    print(f"Your score is {score}. You may try again")
+    print(f"Your score is {score}. You may try again.")
     
